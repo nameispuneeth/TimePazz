@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+body {
+  background-color: #a3cef1;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; 
+  margin: 0;
+  overflow-y: auto; /* fix */
+}
+
+.swal2-title {
+  font-size: 1.5rem !important;
+}
+.swal-buttons-spacing {
+    display: flex;
+    gap: 50px;
+    justify-content: center;
+  }
+  .cbtn {
+    height: 18vmin;
+    width: 18vmin;
+    border: 2px solid #6096ba;
+    border-radius: 0.6rem;
+    font-size: 9vmin;
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
+    background-color: whitesmoke;
+    margin:1vmin;
+    color:gray
+
+}
+
+.reset {
+  border-radius: 0.4rem;
+  border: 2px solid skyblue;
+  background-color: skyblue;
+  width: 23vmin;
+  height: 7vmin;
+  color: white;
+  font-size: 2.5vmin;
+  font-weight: bold;
+  margin: 3vmin;
+}
