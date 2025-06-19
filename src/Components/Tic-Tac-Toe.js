@@ -3,10 +3,7 @@ import Swal from 'sweetalert2';
 import './TicTacToe.css'
 
 export default function TicTacToe () {
-
-    let userName=localStorage.getItem("name");
-    if(userName===null) userName="Puneeth";
-
+    const [userName, setUserName] = useState("");  
     const [comp,setComp]=useState(false);
     const [board,setBoard]=useState(Array(9).fill(""));
     const [turnX,turnO]=useState(true);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
@@ -16,6 +13,7 @@ export default function TicTacToe () {
     const [Cwins,setCwins]=useState(0);
     const [Opponent,setOpponent]=useState("");
     const [draws,setDraws]=useState(0);
+
 
     let patterns=[
         [0,1,2],
@@ -54,7 +52,7 @@ export default function TicTacToe () {
       RestartGame();
       if(comp){
         setComp(false);
-        const name = await askName();
+        const name = await askOpponentName();
         setOpponent(name);
       }else{
         setComp(true);
@@ -104,9 +102,9 @@ export default function TicTacToe () {
     }
 
     let computerMove=async()=>{
-      if(isOneMovComp()){}
-      else if(isOneMovHum()){}
-      else (randomMov()) 
+      if(isOneMovComp()) return;
+      if(isOneMovHum())return;
+      randomMov() 
     }
 
     let HandleClick=(ind)=>{
@@ -125,7 +123,7 @@ export default function TicTacToe () {
                   let wins=Xwins+1;
                   if(comp){
                     wins=Cwins+1;
-                    Swal.fire("Computer Won",`Computer Won ${wins} Times`)
+                    Swal.fire("Computer Won",`Computer Won ${wins} ${(wins===1)?'Time':'Times'}`)
                     setCwins(wins);
                   }
                   else{
@@ -144,7 +142,7 @@ export default function TicTacToe () {
         return false;
     }
 
-    const askName = async () => {
+    const askOpponentName = async () => {
         const result = await Swal.fire({
           title: 'What Is Your Opponent Name?',
           input: 'text',
@@ -164,9 +162,35 @@ export default function TicTacToe () {
         return null;
       };
       
+      
       useEffect(() => {
-        const getMode = async () => {
-          const result = await Swal.fire({
+        const initGame = async () => {
+          let name = localStorage.getItem("userName");
+      
+          if (!name) {
+            const { isConfirmed, value } = await Swal.fire({
+              title: "Enter Your Name",
+              input: "text",
+              inputPlaceholder: "Enter Your Name",
+              confirmButtonColor: '#3085d6',
+              allowOutsideClick: false,
+              inputValidator: (value) => {
+                if (!value) return "Enter a valid name";
+              }
+            });
+      
+            if (isConfirmed && value) {
+              name = value;
+              localStorage.setItem("userName", name);
+            }
+          }
+      
+          if (!name) return; // If still no name, stop.
+      
+          setUserName(name); // Now set it in state
+      
+            
+          const modePrompt = await Swal.fire({
             title: 'ENTER THE MODE OF GAME',
             showDenyButton: true,
             confirmButtonText: 'Vs Computer',
@@ -175,22 +199,22 @@ export default function TicTacToe () {
             denyButtonColor: '#3085d6',
             allowOutsideClick: false,
             customClass: {
-              actions: 'swal-buttons-spacing',
+              actions: "swal-buttons-spacing"
             }
           });
       
-          if (result.isConfirmed) {
+          if (modePrompt.isConfirmed) {
             setComp(true);
             computerMove();
-          } else if (result.isDenied) {
-            const name = await askName();
-            setOpponent(name);
+          } else if (modePrompt.isDenied) {
+            const oppName = await askOpponentName();
+            if (oppName) setOpponent(oppName);
           }
         };
       
-        getMode();
+        initGame();
       }, []);
-     
+      
       useEffect(() => {
         if (comp && turnX && !disabled) {
           setDisabled(true);
@@ -210,8 +234,6 @@ export default function TicTacToe () {
   return (
     <>
     <div className='d-grid justify-content-center align-items-center mt-2 mb-2' >
-    <div className="float-right">History</div>
-
         <div className=" p-5 d-grid justify-content-center align-items-center" style={{backgroundColor:'white',border:'1px solid #a3cef1',borderRadius:'18px',maxHeight:'95vh'}}>
             <h1 className='text-center' style={{color:"#274c77",fontWeight:"bold",fontFamily:'"Quicksand", serif'}}>Tic-Tac-Toe</h1>
             <div className='mt-4'>
