@@ -3,6 +3,8 @@ import Swal from 'sweetalert2';
 import './TicTacToe.css'
 
 export default function TicTacToe () {
+    if(!localStorage.getItem("TicTacToeHistory")) localStorage.setItem("TicTacToeHistory",JSON.stringify([]));
+    const [TictHistory,setTictHistory]=useState(JSON.parse(localStorage.getItem("TicTacToeHistory")));
     const [userName, setUserName] = useState("");  
     const [comp,setComp]=useState(false);
     const [board,setBoard]=useState(Array(9).fill(""));
@@ -11,9 +13,9 @@ export default function TicTacToe () {
     const [Xwins,setXwins]=useState(0);
     const [Owins,setOwins]=useState(0);
     const [Cwins,setCwins]=useState(0);
+    const [winningCombo,setWinningCombo]=useState(Array(9).fill(false));
     const [Opponent,setOpponent]=useState("");
     const [draws,setDraws]=useState(0);
-
 
     let patterns=[
         [0,1,2],
@@ -37,14 +39,25 @@ export default function TicTacToe () {
             if(val==="") return false;
         }
         let drawGames=draws+1;
-        if(comp) Swal.fire("Game Drawn",`${drawGames} Draw With Computer`);
-        else Swal.fire("Game Drawn",`${drawGames} Draw With ${Opponent}`);
+        if(comp){
+          Swal.fire({
+            title: "Game Drawn",
+            text: `${drawGames} ${(drawGames==1)?'Draw':'Draws'} With Computer`,
+            imageUrl: 'https://example.com/draw.png',
+            imageWidth: 200,
+            imageHeight: 200,
+            imageAlt: 'Draw Image',
+            confirmButtonText: "OK", 
+          });
+        }
+        else Swal.fire("Game Drawn",`${drawGames} ${(drawGames==1)?'Draw':'Draws'} With ${Opponent}`);
         setDraws(drawGames);
         return true;
     }
     let RestartGame=()=>{
         setBoard(Array(9).fill(""));
         turnO(true);
+        setWinningCombo(Array(9).fill(false));
         setDisabled(false);
     }
 
@@ -115,32 +128,48 @@ export default function TicTacToe () {
       setBoard(newBoard);
     }
 
-    let gameFinished=()=>{
-        for(let pat of patterns){
-            let val1=pat[0],val2=pat[1],val3=pat[2];
-            if(board[val1]===board[val2] && board[val2]===board[val3] && board[val1]!==""){
-                if(board[val1]==="X"){
-                  let wins=Xwins+1;
-                  if(comp){
-                    wins=Cwins+1;
-                    Swal.fire("Computer Won",`Computer Won ${wins} ${(wins===1)?'Time':'Times'}`)
-                    setCwins(wins);
-                  }
-                  else{
-                    Swal.fire(`${Opponent} Won`,`${Opponent} Won ${wins} ${(wins===1)?'Time':'Times'}`)
-                    setXwins(wins);
-                  }
-
-              }else{
-                  let wins=Owins+1;
-                  Swal.fire(`${userName} Won`,`${userName} Won ${wins} ${(wins===1)?'Time':'Times'}`)
-                  setOwins(wins);
-              }
-                return true;
+    let gameFinished = () => {
+      for (let pat of patterns) {
+        let val1 = pat[0], val2 = pat[1], val3 = pat[2];
+        if (board[val1] === board[val2] && board[val2] === board[val3] && board[val1] !== "") {
+          setDisabled(true);
+          let newCombo = Array(9).fill(false);
+          newCombo[val1] = true;
+          newCombo[val2] = true;
+          newCombo[val3] = true;
+          setWinningCombo(newCombo);
+    
+          if (board[val1] === "X") {
+            let wins = comp ? Cwins + 1 : Xwins + 1;
+            if (comp) {
+              Swal.fire("Computer Won", `Computer Won ${wins} ${(wins === 1) ? 'Time' : 'Times'}`);
+              setCwins(wins);
+            } else {
+              Swal.fire(`${Opponent} Won`, `${Opponent} Won ${wins} ${(wins === 1) ? 'Time' : 'Times'}`);
+              setXwins(wins);
             }
+            let WinsHist = [...TictHistory];
+            const value = comp ? "Computer Won" : `${Opponent} Won`;
+            const now = new Date();
+            const result = `${now.toLocaleDateString()} ${now.toLocaleTimeString()} - ${value}`;
+            WinsHist.push(result);
+            setTictHistory(WinsHist);
+          } else {
+            let wins = Owins + 1;
+            Swal.fire(`${userName} Won`, `${userName} Won ${wins} ${(wins === 1) ? 'Time' : 'Times'}`);
+            setOwins(wins);
+            let WinsHist = [...TictHistory];
+            const value = `${userName} Won`;
+            const now = new Date();
+            const result = `${now.toLocaleDateString()} ${now.toLocaleTimeString()} - ${value}`;
+            WinsHist.push(result);
+            setTictHistory(WinsHist);
+          }
+          return true;
         }
-        return false;
-    }
+      }
+      return false;
+    };
 
     const askOpponentName = async () => {
         const result = await Swal.fire({
@@ -185,9 +214,9 @@ export default function TicTacToe () {
             }
           }
       
-          if (!name) return; // If still no name, stop.
+          if (!name) return; 
       
-          setUserName(name); // Now set it in state
+          setUserName(name); 
       
             
           const modePrompt = await Swal.fire({
@@ -229,31 +258,39 @@ export default function TicTacToe () {
         if (gameFinished() || boardFill()) {
             setDisabled(true);
         }
-    }, [board]); 
+    }, [board]);
+    
+    useEffect(()=>{
+      localStorage.setItem("TicTacToeHistory",JSON.stringify(TictHistory));
+    },[TictHistory])
 
   return (
     <>
     <div className='d-grid justify-content-center align-items-center mt-2 mb-2' >
+    <button className="history-btn">History</button>
+
         <div className=" p-5 d-grid justify-content-center align-items-center" style={{backgroundColor:'white',border:'1px solid #a3cef1',borderRadius:'18px',maxHeight:'95vh'}}>
             <h1 className='text-center' style={{color:"#274c77",fontWeight:"bold",fontFamily:'"Quicksand", serif'}}>Tic-Tac-Toe</h1>
             <div className='mt-4'>
                 <div className="row">
-                    <button className="cbtn" onClick={()=>HandleClick(0)} disabled={disabled}>{board[0]}</button>
-                    <button className="cbtn" onClick={()=>HandleClick(1)} disabled={disabled}>{board[1]}</button>
-                    <button className="cbtn" onClick={()=>HandleClick(2)} disabled={disabled}>{board[2]}</button>
+                    <button className={`cbtn ${winningCombo[0]?'win':''}`} onClick={()=>HandleClick(0)} disabled={disabled}>{board[0]}</button>
+                    <button className={`cbtn ${winningCombo[1]?'win':''}`} onClick={()=>HandleClick(1)} disabled={disabled}>{board[1]}</button>
+                    <button className={`cbtn ${winningCombo[2]?'win':''}`} onClick={()=>HandleClick(2)} disabled={disabled}>{board[2]}</button>
                 </div>
                 <div className="row">
-                    <button className="cbtn" onClick={()=>HandleClick(3)} disabled={disabled}>{board[3]}</button>
-                    <button className="cbtn" onClick={()=>HandleClick(4)} disabled={disabled}>{board[4]}</button>
-                    <button className="cbtn" onClick={()=>HandleClick(5)} disabled={disabled}>{board[5]}</button>
+                    <button className={`cbtn ${winningCombo[3]?'win':''}`} onClick={()=>HandleClick(3)} disabled={disabled}>{board[3]}</button>
+                    <button className={`cbtn ${winningCombo[4]?'win':''}`} onClick={()=>HandleClick(4)} disabled={disabled}>{board[4]}</button>
+                    <button className={`cbtn ${winningCombo[5]?'win':''}`} onClick={()=>HandleClick(5)} disabled={disabled}>{board[5]}</button>
                 </div>
                 <div className="row">
-                    <button className="cbtn" onClick={()=>HandleClick(6)} disabled={disabled}>{board[6]}</button>
-                    <button className="cbtn" onClick={()=>HandleClick(7)} disabled={disabled}>{board[7]}</button>
-                    <button className="cbtn" onClick={()=>HandleClick(8)} disabled={disabled}>{board[8]}</button>
+                    <button className={`cbtn ${winningCombo[6]?'win':''}`} onClick={()=>HandleClick(6)} disabled={disabled}>{board[6]}</button>
+                    <button className={`cbtn ${winningCombo[7]?'win':''}`} onClick={()=>HandleClick(7)} disabled={disabled}>{board[7]}</button>
+                    <button className={`cbtn ${winningCombo[8]?'win':''}`} onClick={()=>HandleClick(8)} disabled={disabled}>{board[8]}</button>
                 </div>
+                <div className='mt-2'>
                 <button className='reset' onClick={()=>RestartGame()}>New Game</button>
                 <button className='reset' onClick={()=>ChangeMode()}>Change Mode</button>
+                </div>
             </div>
             
         </div>
