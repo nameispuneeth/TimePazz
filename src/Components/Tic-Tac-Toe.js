@@ -1,21 +1,37 @@
 import React, { useEffect,useState } from 'react';
 import Swal from 'sweetalert2';
 import './TicTacToe.css'
-
+import { useNavigate } from 'react-router-dom';
 export default function TicTacToe () {
-    if(!localStorage.getItem("TicTacToeHistory")) localStorage.setItem("TicTacToeHistory",JSON.stringify([]));
-    const [TictHistory,setTictHistory]=useState(JSON.parse(localStorage.getItem("TicTacToeHistory")));
-    const [userName, setUserName] = useState("");  
-    const [comp,setComp]=useState(false);
-    const [board,setBoard]=useState(Array(9).fill(""));
-    const [turnX,turnO]=useState(true);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
-    const [disabled,setDisabled]=useState(false);
-    const [Xwins,setXwins]=useState(0);
-    const [Owins,setOwins]=useState(0);
-    const [Cwins,setCwins]=useState(0);
-    const [winningCombo,setWinningCombo]=useState(Array(9).fill(false));
-    const [Opponent,setOpponent]=useState("");
-    const [draws,setDraws]=useState(0);
+
+  const defaultData = {
+    userName: '',
+    History: [],
+    MyWins: 0,
+    OppWins: 0,
+    CompWins: 0,
+    Draws: 0
+  };
+  const stored = JSON.parse(localStorage.getItem('TicTacToeData'));
+  const [gameData, setGameData] = useState(stored || defaultData);
+
+  const [userName, setUserName] = useState(gameData.userName);
+  const [TictHistory, setTictHistory] = useState(gameData.History);
+  const [board, setBoard] = useState(Array(9).fill(""));
+  const [turnX, turnO] = useState(true);
+  const [disabled, setDisabled] = useState(false);
+  const [winningCombo, setWinningCombo] = useState(Array(9).fill(false));
+  const [Opponent, setOpponent] = useState("");
+  const [comp, setComp] = useState(false);
+  const [Cwins,setCwins]=useState(0);
+  const [Owins,setOwins]=useState(0);
+  const [Xwins,setXwins]=useState(0);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    localStorage.setItem("TicTacToeData", JSON.stringify(gameData));
+  }, [gameData]);
+
 
     let patterns=[
         [0,1,2],
@@ -28,32 +44,21 @@ export default function TicTacToe () {
         [2,4,6]
     ];
 
-    let makeMove=(ind,val)=>{
-      let newBoard=[...board];
-      newBoard[ind]=val;
-      turnO(!turnX);
-      setBoard(newBoard);
-    }
-    let boardFill=()=>{
-        for(let val of board){
-            if(val==="") return false;
-        }
-        let drawGames=draws+1;
-        if(comp){
-          Swal.fire({
-            title: "Game Drawn",
-            text: `${drawGames} ${(drawGames==1)?'Draw':'Draws'} With Computer`,
-            imageUrl: 'https://example.com/draw.png',
-            imageWidth: 200,
-            imageHeight: 200,
-            imageAlt: 'Draw Image',
-            confirmButtonText: "OK", 
-          });
-        }
-        else Swal.fire("Game Drawn",`${drawGames} ${(drawGames==1)?'Draw':'Draws'} With ${Opponent}`);
-        setDraws(drawGames);
-        return true;
-    }
+    
+  const makeMove = (ind, val) => {
+    let newBoard = [...board];
+    newBoard[ind] = val;
+    turnO(!turnX);
+    setBoard(newBoard);
+  };
+    
+  const boardFill = () => {
+    if (board.includes("")) return false;
+
+    Swal.fire("Game Drawn", `Draw #${gameData.Draws + 1}`);
+    setGameData(prev => ({ ...prev, Draws: prev.Draws + 1 }));
+    return true;
+  };
     let RestartGame=()=>{
         setBoard(Array(9).fill(""));
         turnO(true);
@@ -130,41 +135,46 @@ export default function TicTacToe () {
 
     let gameFinished = () => {
       for (let pat of patterns) {
-        let val1 = pat[0], val2 = pat[1], val3 = pat[2];
-        if (board[val1] === board[val2] && board[val2] === board[val3] && board[val1] !== "") {
-          setDisabled(true);
+        let [a, b, c] = pat;
+        if (board[a] && board[a] === board[b] && board[b] === board[c]) {
           let newCombo = Array(9).fill(false);
-          newCombo[val1] = true;
-          newCombo[val2] = true;
-          newCombo[val3] = true;
+          newCombo[a] = newCombo[b] = newCombo[c] = true;
           setWinningCombo(newCombo);
-    
-          if (board[val1] === "X") {
-            let wins = comp ? Cwins + 1 : Xwins + 1;
+          setDisabled(true);
+  
+          const now = new Date().toLocaleString();
+  
+          if (board[a] === "X") {
             if (comp) {
-              Swal.fire("Computer Won", `Computer Won ${wins} ${(wins === 1) ? 'Time' : 'Times'}`);
+              let wins=Cwins+1;
+              Swal.fire("Computer Won", `Computer Won ${wins} ${(wins==1)?'Time' :'Times'}`);
               setCwins(wins);
+              setGameData(prev => ({
+                ...prev,
+                CompWins: prev.CompWins + 1,
+                History: [...prev.History, `${now} - Computer Won Against You`]
+              }));
             } else {
-              Swal.fire(`${Opponent} Won`, `${Opponent} Won ${wins} ${(wins === 1) ? 'Time' : 'Times'}`);
+              let wins=Xwins+1;
+              Swal.fire(`${Opponent} Won`, `${Opponent} Won ${wins} ${(wins==1)?'Time' :'Times'}`);
               setXwins(wins);
+              setGameData(prev => ({
+                ...prev,
+                OppWins: prev.OppWins + 1,
+                History: [...prev.History, `${now} - ${Opponent} Won Against You`]
+              }));
             }
-            let WinsHist = [...TictHistory];
-            const value = comp ? "Computer Won" : `${Opponent} Won`;
-            const now = new Date();
-            const result = `${now.toLocaleDateString()} ${now.toLocaleTimeString()} - ${value}`;
-            WinsHist.push(result);
-            setTictHistory(WinsHist);
           } else {
-            let wins = Owins + 1;
-            Swal.fire(`${userName} Won`, `${userName} Won ${wins} ${(wins === 1) ? 'Time' : 'Times'}`);
+            let wins=Owins+1;
+            Swal.fire(`${userName} Won`, `You Won ${wins} ${(wins==1)?'Time' :'Times'}`);
             setOwins(wins);
-            let WinsHist = [...TictHistory];
-            const value = `${userName} Won`;
-            const now = new Date();
-            const result = `${now.toLocaleDateString()} ${now.toLocaleTimeString()} - ${value}`;
-            WinsHist.push(result);
-            setTictHistory(WinsHist);
+            setGameData(prev => ({
+              ...prev,
+              MyWins: prev.MyWins + 1,
+              History: [...prev.History, `${now} - You Won Against ${(comp)?'Computer':Opponent}`]
+            }));
           }
+  
           return true;
         }
       }
@@ -194,29 +204,32 @@ export default function TicTacToe () {
       
       useEffect(() => {
         const initGame = async () => {
-          let name = localStorage.getItem("userName");
-      
-          if (!name) {
-            const { isConfirmed, value } = await Swal.fire({
-              title: "Enter Your Name",
-              input: "text",
-              inputPlaceholder: "Enter Your Name",
-              confirmButtonColor: '#3085d6',
-              allowOutsideClick: false,
-              inputValidator: (value) => {
-                if (!value) return "Enter a valid name";
+          let name = gameData.userName;
+
+            if (!name) {
+              const { isConfirmed, value } = await Swal.fire({
+                title: "Enter Your Name",
+                input: "text",
+                inputPlaceholder: "Enter Your Name",
+                confirmButtonColor: '#3085d6',
+                allowOutsideClick: false,
+                inputValidator: (value) => {
+                  if (!value) return "Enter a valid name";
+                }
+              });
+
+              if (isConfirmed && value) {
+                name = value;
+                setUserName(name);
+                setGameData(prev => ({
+                  ...prev,
+                  userName: name
+                }));
               }
-            });
-      
-            if (isConfirmed && value) {
-              name = value;
-              localStorage.setItem("userName", name);
             }
-          }
-      
-          if (!name) return; 
-      
-          setUserName(name); 
+
+            if (!name) return;
+ 
       
             
           const modePrompt = await Swal.fire({
@@ -260,14 +273,11 @@ export default function TicTacToe () {
         }
     }, [board]);
     
-    useEffect(()=>{
-      localStorage.setItem("TicTacToeHistory",JSON.stringify(TictHistory));
-    },[TictHistory])
 
   return (
     <>
     <div className='d-grid justify-content-center align-items-center mt-2 mb-2' >
-    <button className="history-btn">History</button>
+    <button className="history-btn" onClick={()=>navigate("/history")}>History</button>
 
         <div className=" p-5 d-grid justify-content-center align-items-center" style={{backgroundColor:'white',border:'1px solid #a3cef1',borderRadius:'18px',maxHeight:'95vh'}}>
             <h1 className='text-center' style={{color:"#274c77",fontWeight:"bold",fontFamily:'"Quicksand", serif'}}>Tic-Tac-Toe</h1>
