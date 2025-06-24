@@ -112,3 +112,8 @@ body {
 .history-btn:hover {
   background-color: #1d3a5f;
 }
+.submission-box:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+  cursor: default;
+}

@@ -16,7 +16,6 @@ export default function TicTacToe () {
   const [gameData, setGameData] = useState(stored || defaultData);
 
   const [userName, setUserName] = useState(gameData.userName);
-  const [TictHistory, setTictHistory] = useState(gameData.History);
   const [board, setBoard] = useState(Array(9).fill(""));
   const [turnX, turnO] = useState(true);
   const [disabled, setDisabled] = useState(false);
@@ -142,7 +141,6 @@ export default function TicTacToe () {
           setWinningCombo(newCombo);
           setDisabled(true);
   
-          const now = new Date().toLocaleString();
   
           if (board[a] === "X") {
             if (comp) {
@@ -152,7 +150,7 @@ export default function TicTacToe () {
               setGameData(prev => ({
                 ...prev,
                 CompWins: prev.CompWins + 1,
-                History: [...prev.History, `${now} - Computer Won Against You`]
+                History: [...prev.History, { date: new Date(), result: "Computer Won Against You" }]
               }));
             } else {
               let wins=Xwins+1;
@@ -161,7 +159,7 @@ export default function TicTacToe () {
               setGameData(prev => ({
                 ...prev,
                 OppWins: prev.OppWins + 1,
-                History: [...prev.History, `${now} - ${Opponent} Won Against You`]
+                History: [...prev.History, { date: new Date(), result: `${Opponent} Won Against You` }]
               }));
             }
           } else {
@@ -171,7 +169,7 @@ export default function TicTacToe () {
             setGameData(prev => ({
               ...prev,
               MyWins: prev.MyWins + 1,
-              History: [...prev.History, `${now} - You Won Against ${(comp)?'Computer':Opponent}`]
+              History: [...prev.History, { date: new Date(), result:`You Won Against ${(comp)?'Computer':Opponent}`}]
             }));
           }
   
