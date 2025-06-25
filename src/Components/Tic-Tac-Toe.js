@@ -278,7 +278,7 @@ export default function TicTacToe () {
     <button className="history-btn" onClick={()=>navigate("/history")}>History</button>
 
         <div className=" p-5 d-grid justify-content-center align-items-center" style={{backgroundColor:'white',border:'1px solid #a3cef1',borderRadius:'18px',maxHeight:'95vh'}}>
-            <h1 className='text-center' style={{color:"#274c77",fontWeight:"bold",fontFamily:'"Quicksand", serif'}}>Tic-Tac-Toe</h1>
+            <h1 className='text-center heading' style={{color:"#274c77",fontWeight:"bold",fontFamily:'"Quicksand", serif'}}>Tic-Tac-Toe</h1>
             <div className='mt-4'>
                 <div className="row">
                     <button className={`cbtn ${winningCombo[0]?'win':''}`} onClick={()=>HandleClick(0)} disabled={disabled}>{board[0]}</button>

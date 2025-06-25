@@ -1,9 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+.body{
+  height: 100dvh;
+}
 .row {
     display: flex;
   }
  .sm {
-  height: 9vmin;
-  width: 9vmin;
+  height: 8vmin;
+  width: 8vmin;
   text-align: center;
   font-size: 4vmin;
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -28,17 +32,19 @@
   }
   .solve{
     border-radius: 0.4rem;
-    border: 2px solid white;
-    background-color: white;
+    border: 2px solid #274c77;
+    background-color: #274c77;
     min-width: 22vmin;
     max-width:30vmin;
     min-height:7vmin;
     max-height: 15vmin;
-    color: #274c77;
+    color: white;
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
     font-size: 2.5vmin;
     margin: 3vmin;
   }
+
+  
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -47,4 +53,20 @@
   
   input[type="number"] {
     -moz-appearance: textfield;
+  }
+  @media (max-width: 600px) {
+    .sm{
+      height:38px;
+      width:38px;
+    }
+    .solve{
+      height:20vmin;
+      width:28vmin;
+      font-family: 'Quicksand', sans-serif;
+      font-size:4vmin;
+      font-weight: bold;
+    }
+    .heading{
+      font-size:10vmin
+    }
   }

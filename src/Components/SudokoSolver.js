@@ -59,6 +59,7 @@ export default function Sudoko(){
     <>
     {Loading && <div className="loading">Solving...</div>}
     <div className="mt-3">
+    <h1 className='text-center heading mb-3' style={{color:"#274c77",fontWeight:"bold",fontFamily:'"Quicksand", serif'}}>Sudoko Solver</h1>
      {sudokuGrid.map((row,rInd)=>(
       <div className="row" key={`${rInd}`}>
         {row.map((cell,cInd)=>(
@@ -78,12 +79,12 @@ export default function Sudoko(){
         ))}
       </div>
      ))}
-     <button className="btn solve mt-3" onClick={()=>SolveSudoko()}>SOLVE</button>
-     <button className="btn solve mt-3" onClick={()=>{
+     <button className="btn solve mt-4" onClick={()=>SolveSudoko()}>SOLVE</button>
+     <button className="btn solve mt-4" onClick={()=>{
       setSudokuGrid(Array.from({length:9},()=>Array(9).fill("")));
       setsudokuStyle(Array.from({length:9},()=>Array(9).fill(false)));
       setSolved(false);
-     }}>Reset</button>
+     }}>RESET</button>
     </div>
     </>
   );

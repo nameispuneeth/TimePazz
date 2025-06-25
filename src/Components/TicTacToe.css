@@ -5,7 +5,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh; 
+  min-height: 100dvh; 
   margin: 0;
   overflow-y: auto;
 }
@@ -22,8 +22,9 @@ body {
     height: 18vmin;
     width: 18vmin;
     border: 2px solid #6096ba;
+    font-family: 'Quicksand', sans-serif;
     border-radius: 0.6rem;
-    font-size: 9vmin;
+    font-size: 10vmin;
     font-weight: bold;
     text-align: center;
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
@@ -87,4 +88,19 @@ body {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
   transform: translateY(-1px);
   cursor: default;
+}
+@media (max-width: 600px) {
+  .cbtn{
+    height:24vmin;
+    width:24vmin;
+    font-size: 14vmin;
+  }
+  .reset {
+    height: 20vmin;
+    font-size: 13px;
+    width: 28vmin;
+  }
+  .heading{
+    font-size:10vmin
+  }
 }

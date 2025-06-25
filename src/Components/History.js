@@ -48,12 +48,11 @@ export default function GameStats() {
   ];
 
   const handleShowMore = () => {
-    setVisibleCount(prev => prev + 6);
+    setVisibleCount(prev => prev + 5);
   };
 
   return (
     <div className="container mt-4">
-      {/* Header */}
       <div >
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2
@@ -66,7 +65,6 @@ export default function GameStats() {
         <span className="text-muted">Player: <strong>{gameData.userName || "Unknown"}</strong></span>
       </div>
 
-      {/* Stats Cards */}
       <div className="row g-4">
         {cardInfo.map((card, idx) => (
           <div className="col-md-6 col-lg-3" key={idx}>
