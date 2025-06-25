@@ -1,17 +1,63 @@
 import { useState } from "react";
+import Swal from "sweetalert2";
 import './Sudoko.css'
 
 export default function Sudoko(){
   const [sudokuGrid, setSudokuGrid] = useState(
     Array.from({ length: 9 }, () => Array(9).fill(""))
   );
+  const [sudokuStyle, setsudokuStyle] = useState(
+    Array.from({ length: 9 }, () => Array(9).fill(false))
+  );
+  const [Loading,setLoading]=useState(false);
+  const [Solved,setSolved]=useState(false);
   let handleChange=(row,col,value)=>{
     let newGrid=sudokuGrid.map((r,rInd)=>(
       r.map((cell,cInd)=>(rInd==row && cInd==col ? value:cell))
     ))
     setSudokuGrid(newGrid);
   }
+  let isPos=(i,j,k,sudoko)=>{
+    for(let a=0;a<9;a++){
+      if(sudoko[a][j]==k || sudoko[i][a]==k) return false;
+      else if (sudoko[3 * Math.floor(i / 3) + Math.floor(a / 3)][3 * Math.floor(j / 3) + (a % 3)] == k) return false;
+    }
+    return true;
+  }
+  let backTrack=(sudoko,styling)=>{
+    for(let i=0;i<9;i++){
+      for(let j=0;j<9;j++){
+        if(sudoko[i][j]==""){
+          for(let k=1;k<=9;k++){
+            if(isPos(i,j,k,sudoko)){
+              sudoko[i][j] = k.toString();
+              styling[i][j]=true;
+              if(backTrack(sudoko,styling)) return true;
+              else sudoko[i][j]="";
+            }
+          }
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+  let SolveSudoko=async()=>{
+    if(Solved) return;
+    setLoading(true);
+    let sudoko = sudokuGrid.map(row => [...row]); 
+    let styling=Array.from({ length: 9 }, () => Array(9).fill(false));
+    let val=await backTrack(sudoko,styling);
+    if(val){
+      setSudokuGrid(sudoko);
+      setsudokuStyle(styling);
+      setSolved(true);
+    }
+    setLoading(false)
+  }
   return(
+    <>
+    {Loading && <div className="loading">Solving...</div>}
     <div className="mt-3">
      {sudokuGrid.map((row,rInd)=>(
       <div className="row" key={`${rInd}`}>
@@ -22,6 +68,7 @@ export default function Sudoko(){
             ${rInd % 3 === 2 ? 'bottom-border' : ''}
             ${cInd === 0 ? 'first-col' : ''}
             ${rInd === 0 ? 'first-row' : ''}
+            ${sudokuStyle[rInd][cInd]?'text-success':''}
           `}
           min="1" max="9" pattern="[1-9]" value={cell} onChange={(e)=>{
             let val=e.target.value;
@@ -31,7 +78,13 @@ export default function Sudoko(){
         ))}
       </div>
      ))}
-     <button className="btn solve mt-3">SOLVE</button>
+     <button className="btn solve mt-3" onClick={()=>SolveSudoko()}>SOLVE</button>
+     <button className="btn solve mt-3" onClick={()=>{
+      setSudokuGrid(Array.from({length:9},()=>Array(9).fill("")));
+      setsudokuStyle(Array.from({length:9},()=>Array(9).fill(false)));
+      setSolved(false);
+     }}>Reset</button>
     </div>
+    </>
   );
 }
