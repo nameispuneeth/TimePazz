@@ -1,8 +1,12 @@
 import { useState } from "react";
 import Swal from "sweetalert2";
 import './Sudoko.css'
+import LogoImg from './Images/logo.png'
+import { useNavigate } from "react-router-dom";
 
 export default function Sudoko(){
+  const navigate = useNavigate(); // ✅ must be called inside component
+
   const [sudokuGrid, setSudokuGrid] = useState(
     Array.from({ length: 9 }, () => Array(9).fill(""))
   );
@@ -58,7 +62,8 @@ export default function Sudoko(){
   return(
     <>
     {Loading && <div className="loading">Solving...</div>}
-    <div className="mt-3">
+    <img src={LogoImg} style={{position:'absolute',top:'10px',left:'10px',height:'5vmin',width:'5vmin',cursor:'pointer'}} onClick={()=>navigate('/')}/>
+    <section className="mainCenter text-center bg-light">
     <h1 className='text-center heading mb-3' style={{color:"#274c77",fontWeight:"bold",fontFamily:'"Quicksand", serif'}}>Sudoko Solver</h1>
      {sudokuGrid.map((row,rInd)=>(
       <div className="row" key={`${rInd}`}>
@@ -85,7 +90,7 @@ export default function Sudoko(){
       setsudokuStyle(Array.from({length:9},()=>Array(9).fill(false)));
       setSolved(false);
      }}>RESET</button>
-    </div>
+    </section>
     </>
   );
 }

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './TicTacToe.css'
+import LogoImg from './Images/logo.png'
+
 
 let getTimeAgo=(dateStr)=>{
   const past = new Date(dateStr);
@@ -53,6 +55,8 @@ export default function GameStats() {
 
   return (
     <div className="container mt-4">
+          <img src={LogoImg} style={{position:'absolute',top:'10px',left:'10px',height:'5vmin',width:'5vmin',cursor:'pointer'}} onClick={()=>navigate('/')}/>
+
       <div >
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2

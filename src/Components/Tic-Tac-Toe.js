@@ -2,8 +2,9 @@ import React, { useEffect,useState } from 'react';
 import Swal from 'sweetalert2';
 import './TicTacToe.css'
 import { useNavigate } from 'react-router-dom';
-export default function TicTacToe () {
+import LogoImg from './Images/logo.png'
 
+export default function TicTacToe () {
   const defaultData = {
     userName: '',
     History: [],
@@ -275,8 +276,10 @@ export default function TicTacToe () {
   return (
     <>
     <div className='d-grid justify-content-center align-items-center mt-2 mb-2' >
-    <button className="history-btn" onClick={()=>navigate("/history")}>History</button>
+    <img src={LogoImg} style={{position:'absolute',top:'10px',left:'10px',height:'5vmin',width:'5vmin',cursor:'pointer'}} onClick={()=>navigate('/')}/>
 
+    <button className="history-btn" onClick={()=>navigate("/history")}>History</button>
+    
         <div className=" p-5 d-grid justify-content-center align-items-center" style={{backgroundColor:'white',border:'1px solid #a3cef1',borderRadius:'18px',maxHeight:'95vh'}}>
             <h1 className='text-center heading' style={{color:"#274c77",fontWeight:"bold",fontFamily:'"Quicksand", serif'}}>Tic-Tac-Toe</h1>
             <div className='mt-4'>
