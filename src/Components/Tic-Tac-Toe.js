@@ -3,6 +3,14 @@ import Swal from 'sweetalert2';
 import './TicTacToe.css'
 import { useNavigate } from 'react-router-dom';
 import LogoImg from './Images/logo.png'
+import HumanWinComp from './Images/HumanAgainstComp.jpg'
+import CompWin from './Images/CompAgainstHuman.png'
+import CompDraw from './Images/CompDraw.png'
+import HumanWinOpp from './Images/humanwins.jpg'  
+import DrawHum from './Images/draw.jpg'
+import OppWins from './Images/OppWins.png'
+import Sun from './Images/sun-icon.png'
+import Moon from './Images/moon-icon.png'
 
 export default function TicTacToe () {
   const defaultData = {
@@ -27,7 +35,12 @@ export default function TicTacToe () {
   const [Owins,setOwins]=useState(0);
   const [Xwins,setXwins]=useState(0);
   const navigate = useNavigate();
+  const [DarkMode,setDarkMode]=useState(false);
 
+  useEffect(()=>{
+    if(DarkMode===false) document.body.classList.remove('dark-theme');
+    else document.body.classList.add('dark-theme');
+  },[DarkMode])
   useEffect(() => {
     localStorage.setItem("TicTacToeData", JSON.stringify(gameData));
   }, [gameData]);
@@ -55,7 +68,15 @@ export default function TicTacToe () {
   const boardFill = () => {
     if (board.includes("")) return false;
 
-    Swal.fire("Game Drawn", `Draw #${gameData.Draws + 1}`);
+    Swal.fire({
+      title: "Game Drawn",
+      text: `Draw #${gameData.Draws + 1}`,
+      imageUrl:(comp)?CompDraw:DrawHum,
+      imageWidth: (comp)?200:250,
+      imageHeight: (comp)?200:250,
+      imageAlt: 'Draw Image',
+    });    
+    
     setGameData(prev => ({ ...prev, Draws: prev.Draws + 1 }));
     return true;
   };
@@ -146,7 +167,12 @@ export default function TicTacToe () {
           if (board[a] === "X") {
             if (comp) {
               let wins=Cwins+1;
-              Swal.fire("Computer Won", `Computer Won ${wins} ${(wins==1)?'Time' :'Times'}`);
+              Swal.fire({title:"Computer Won",
+                text: `Computer Won ${wins} ${(wins==1)?'Time' :'Times'}`,
+                imageUrl:CompWin,
+                imageHeight:200,
+                imageWidth:200
+                });
               setCwins(wins);
               setGameData(prev => ({
                 ...prev,
@@ -155,7 +181,7 @@ export default function TicTacToe () {
               }));
             } else {
               let wins=Xwins+1;
-              Swal.fire(`${Opponent} Won`, `${Opponent} Won ${wins} ${(wins==1)?'Time' :'Times'}`);
+              Swal.fire({title:`${Opponent} Won`, text:`${Opponent} Won ${wins} ${(wins==1)?'Time' :'Times'}`,imageUrl:OppWins,imageHeight:200,imageWidth:200});
               setXwins(wins);
               setGameData(prev => ({
                 ...prev,
@@ -165,7 +191,12 @@ export default function TicTacToe () {
             }
           } else {
             let wins=Owins+1;
-            Swal.fire(`${userName} Won`, `You Won ${wins} ${(wins==1)?'Time' :'Times'}`);
+            Swal.fire({title:`${userName} Won`, 
+                    text:`You Won ${wins} ${(wins==1)?'Time' :'Times'}`,
+                    imageUrl:(comp)?HumanWinComp:HumanWinOpp,
+                    imageHeight:200,
+                    imageWidth:(comp)?200:210
+          });
             setOwins(wins);
             setGameData(prev => ({
               ...prev,
@@ -277,10 +308,10 @@ export default function TicTacToe () {
     <>
     <div className='d-grid justify-content-center align-items-center mt-2 mb-2' >
     <img src={LogoImg} style={{position:'absolute',top:'10px',left:'10px',height:'5vmin',width:'5vmin',cursor:'pointer'}} onClick={()=>navigate('/')}/>
-
+    <img src={(DarkMode)?Sun:Moon} className={`logoimg ${DarkMode?'':'moonimg'}`} onClick={()=>setDarkMode(!DarkMode)}/>
     <button className="history-btn" onClick={()=>navigate("/history")}>History</button>
     
-        <div className=" p-5 d-grid justify-content-center align-items-center" style={{backgroundColor:'white',border:'1px solid #a3cef1',borderRadius:'18px',maxHeight:'95vh'}}>
+        <div className=" p-5 d-grid justify-content-center align-items-center gamingBoard" style={{borderRadius:'18px',maxHeight:'95vh'}}>
             <h1 className='text-center heading' style={{color:"#274c77",fontWeight:"bold",fontFamily:'"Quicksand", serif'}}>Tic-Tac-Toe</h1>
             <div className='mt-4'>
                 <div className="row">

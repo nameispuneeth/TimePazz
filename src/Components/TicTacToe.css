@@ -1,78 +1,99 @@
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+/* Base (Light Mode) Variables */
+:root {
+  --gamingbg-color: white;
+  --bg-color: #a3cef1;
+  --text-color: #274c77;
+  --card-bg: white;
+  --btn-bg: skyblue;
+  --btn-text: white;
+  --border-color: #6096ba;
+  --win-animation-color: gray;
+  --btn-bg:whitesmoke;
+}
+.dark-theme {
+  --gamingbg-color: #0f172a;
+  --bg-color:#0b1120  ;
+  --card-bg: #1e293b;
+  --accent-blue: #3b82f6;
+  --accent-blue-glow: #2563eb;
+  --text-color: #ffffff;
+  --text-secondary: #cbd5e1;
+  --btn-bg: var(--accent-blue);
+  --btn-hover: var(--accent-blue-glow);
+  --border-color: var(--accent-blue);
+  --win-animation-color: white;
+  --glow-color: rgba(59, 130, 246, 0.4);
+  --text-glow: 0 0 8px rgba(255, 255, 255, 0.2);
+}
+
+
 body {
-  background-color: #a3cef1;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Quicksand', sans-serif;
+  min-height: 100dvh;
+  margin: 0;
+  overflow-y: auto;
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.heading {
   font-family: 'Quicksand', sans-serif;
-  min-height: 100dvh; 
-  margin: 0;
-  overflow-y: auto;
+  font-weight: bold;
+  color: var(--text-color);
 }
 
-.swal2-title {
-  font-size: 1.5rem !important;
-}
-.swal-buttons-spacing {
-    display: flex;
-    gap: 50px;
-    justify-content: center;
-  }
-  .cbtn {
-    height: 18vmin;
-    width: 18vmin;
-    border: 2px solid #6096ba;
-    font-family: 'Quicksand', sans-serif;
-    border-radius: 0.6rem;
-    font-size: 10vmin;
-    font-weight: bold;
-    text-align: center;
-    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
-    background-color: whitesmoke;
-    margin:1vmin;
-    color:gray
-
+.cbtn {
+  height: 18vmin;
+  width: 18vmin;
+  border: 2px solid var(--border-color);
+  font-family: 'Quicksand', sans-serif;
+  border-radius: 0.6rem;
+  font-size: 10vmin;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
+  background-color: var(--btn-bg);
+  margin: 1vmin;
+  color: var(--win-animation-color);
 }
 
 .reset {
   border-radius: 0.4rem;
-  border: 2px solid skyblue;
-  background-color: skyblue;
+  border: 2px solid var(--border-color);
+  background-color: var(--border-color);
   min-width: 22vmin;
-  max-width:30vmin;
-  min-height:7vmin;
+  max-width: 30vmin;
+  min-height: 7vmin;
   max-height: 15vmin;
-  color: white;
+  color: var(--btn-text);
   font-size: 2.5vmin;
   font-weight: bold;
   margin: 3vmin;
+  cursor: pointer;
 }
 
-
-.win{
+.win {
   animation: xyz 1s infinite;
 }
 
-
 @keyframes xyz {
-  0%{
-      transform: scale(1.0);
-  }
-  50%{
-      transform: scale(1.03);
-  }
-  100%{
-      transform: scale(1.0);
-  }
+  0%   { transform: scale(1.0); }
+  50%  { transform: scale(1.03); }
+  100% { transform: scale(1.0); }
 }
 
 .history-btn {
   position: absolute;
   top: 10px;
   right: 10px;
-  background-color: #274c77;
-  color: white;
+  border: 2px solid var(--border-color);
+  background-color: var(--border-color);  
+  color: var(--btn-text);
+
   border: none;
   padding: 8px 16px;
   font-weight: bold;
@@ -99,15 +120,37 @@ body {
 .history-btn:hover {
   background-color: #1d3a5f;
 }
+
 .submission-box:hover {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
   transform: translateY(-1px);
   cursor: default;
 }
+.gamingBoard{
+  background-color: var(--gamingbg-color);
+}
+.logoimg {
+  position: absolute;
+  top: 10px;
+  right: 100px;
+  margin:10px;
+  margin-top: 8px;
+  height: 30px;
+  width: 30px;
+  cursor: pointer;
+}
+
+.moonimg {
+  height: 60px;
+  width: 60px;
+  margin: 0;
+}
+
+
 @media (max-width: 600px) {
-  .cbtn{
-    height:24vmin;
-    width:24vmin;
+  .cbtn {
+    height: 24vmin;
+    width: 24vmin;
     font-size: 14vmin;
   }
   .reset {
@@ -115,7 +158,34 @@ body {
     font-size: 13px;
     width: 28vmin;
   }
-  .heading{
-    font-size:10vmin
+  .heading {
+    font-size: 10vmin;
   }
+}
+
+.swal2-image {
+  border-radius: 50% !important;
+}
+.swal2-title {
+  font-size: 1.5rem !important;
+}
+.swal-buttons-spacing {
+  display: flex;
+  gap: 50px;
+  justify-content: center;
+}
+.swal2-confirm,
+.swal2-deny,
+.swal2-cancel {
+  background-color:var(--border-color) !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: 0 0 6px rgba(39, 76, 119, 0.6);
+  font-weight: bold;
+}
+.swal2-popup {
+  background-color: var(--card-bg) !important; /* or any custom color */
+  color: var(--text-color) !important; /* ensures text is readable */
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
 }
