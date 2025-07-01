@@ -307,11 +307,11 @@ export default function TicTacToe () {
   return (
     <>
     <div className='d-grid justify-content-center align-items-center mt-2 mb-2' >
-    <img src={LogoImg} style={{position:'absolute',top:'10px',left:'10px',height:'5vmin',width:'5vmin',cursor:'pointer'}} onClick={()=>navigate('/')}/>
-    <img src={(DarkMode)?Sun:Moon} className={`logoimg ${DarkMode?'':'moonimg'}`} onClick={()=>setDarkMode(!DarkMode)}/>
+    <img src={LogoImg} style={{position:'absolute',top:'10px',left:'10px',height:'25px',width:'25px',cursor:'pointer'}} onClick={()=>navigate('/')}/>
+    <img src={(DarkMode)?Sun:Moon} className={`logoimg ${DarkMode?'':'moonimg'}`} style={{right:'100px'}} onClick={()=>setDarkMode(!DarkMode)}/>
     <button className="history-btn" onClick={()=>navigate("/history")}>History</button>
     
-        <div className=" p-5 d-grid justify-content-center align-items-center gamingBoard" style={{borderRadius:'18px',maxHeight:'95vh'}}>
+        <div className=" p-5 d-grid justify-content-center align-items-center gamingBoard" style={{maxHeight:'95vh'}}>
             <h1 className='text-center heading' style={{color:"#274c77",fontWeight:"bold",fontFamily:'"Quicksand", serif'}}>Tic-Tac-Toe</h1>
             <div className='mt-4'>
                 <div className="row">

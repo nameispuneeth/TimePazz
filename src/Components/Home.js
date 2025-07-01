@@ -1,13 +1,27 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import { useNavigate,Link } from 'react-router-dom';
 import './TicTacToe.css'
 import LogoImg from './Images/logo.png';
 import TicTacToeImg from './Images/tictactoe.png';
 import SudokoImg from './Images/sudoko.png';
+import Sun from './Images/sun-icon.png'
+import Moon from './Images/moon-icon.png'
+
+
 const Home = () => {
+  
+  const [DarkMode,setDarkMode]=useState(false);
+
+useEffect(()=>{
+    if(DarkMode===false) document.body.classList.remove('dark-theme');
+    else document.body.classList.add('dark-theme');
+  },[DarkMode]);
+
   return (
     <>
-       <section className="py-5 text-center bg-light mt-3 mb-3 ">
+       <section className="py-5 text-center mt-5 mb-3 gamingBoard">
+       <img src={(DarkMode)?Sun:Moon} className={`logoimg ${DarkMode?'':'moonimg'}`} style={{marginTop:0}} onClick={()=>setDarkMode(!DarkMode)}/>
+
     <div className="container">
       <img src={LogoImg} alt="Z" width="72" height="72" className="mb-3"/>
       <h1 className="display-5 fw-bold">GamePazz</h1>
@@ -24,8 +38,8 @@ const Home = () => {
                       objectFit: 'cover',
                       alignSelf: 'center'}}   alt="Tic Tac Toe" />
               <div className="card-body">
-                <h5 className="card-title text-dark">Tic Tac Toe</h5>
-                <p className="card-text text-muted">Play against Link friend or the computer and master the classics.</p>
+                <h5 className="card-title mb-4">Tic Tac Toe</h5>
+                <p className="card-text">Play against friend or the computer and master the classics.</p>
               </div>
             </div>
           </Link>
@@ -41,8 +55,8 @@ const Home = () => {
                       objectFit: 'cover',
                       alignSelf: 'center'}}  alt="Sudoku Solver" />
               <div className="card-body">
-                <h5 className="card-title text-dark">Sudoku Solver</h5>
-                <p className="card-text text-muted">Input your puzzle and solve it instantly with AI-powered logic.</p>
+                <h5 className="card-title mb-4">Sudoku Solver</h5>
+                <p className="card-text">Input your puzzle and solve it in seconds.</p>
               </div>
             </div>
           </Link>

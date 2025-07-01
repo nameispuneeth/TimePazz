@@ -5,50 +5,13 @@
 .row {
     display: flex;
   }
- .sm {
-  height: 8vmin;
-  width: 8vmin;
-  text-align: center;
-  font-size: 4vmin;
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  border: 1px solid #a3cef1;
-  padding: 0;
-}
+
 
 .mainCenter{
   padding-left:50px;
   padding-right: 50px;
   padding-top: 20px;
 }
-
-.right-border {
-    border-right: 2px solid #274c77 !important;
-  }
-  
-  .bottom-border {
-    border-bottom: 2px solid #274c77 !important;
-  }
-  
-  .first-col {
-    border-left: 2px solid #274c77 !important;
-  }
-  
-  .first-row {
-    border-top: 2px solid #274c77 !important;
-  }
-  .solve{
-    border-radius: 0.4rem;
-    border: 2px solid #274c77;
-    background-color: #274c77;
-    min-width: 22vmin;
-    max-width:30vmin;
-    min-height:7vmin;
-    max-height: 15vmin;
-    color: white;
-    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.5);
-    font-size: 2.5vmin;
-    margin: 3vmin;
-  }
 
   
   input[type="number"]::-webkit-inner-spin-button,
